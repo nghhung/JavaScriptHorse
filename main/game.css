@@ -1,7 +1,16 @@
 /* Import website font */
 @import url('https://stockfont.org/?aa7fbdbda33a2daadc33b30500fd3af8e748bb18e45750b6941c8e2085ae7296');
 
-body {font-family: 'Oxygen-Regular', 'verdana', 'sans serif'; background-image: url(images/bg.png); margin: 0; padding: 0;}
+html, body {height: 100%; width: 100%; overflow: hidden;}
+body {font-family: 'Be Vietnam Pro', 'Oxygen-Regular', 'Verdana', sans-serif; background: #000; margin: 0; padding: 0; color: #eef2ff;}
+
+:root{
+	--hero-accent: #6ee7ff;
+	--hero-accent-strong: #38bdf8;
+	--hero-text: #f8fafc;
+	--hero-sub: rgba(226,232,240,0.92);
+	--hero-glow: rgba(56,189,248,0.35);
+}
 
 
 aside {display: none; width: 200px; position: fixed; height: 100vh; left: 100%; margin-left: -240px; background-color: #ddd; border-left: 5px solid #bbb; padding: 20px;}
@@ -156,21 +165,42 @@ aside ul {list-style-type: none; margin-left: 0; padding-left: 0; margin-bottom:
 .track {border-style: solid;
 	border-collapse: separate;
 	display: table;
-border-width: 16px;
--moz-border-image: url(outer.png) 14 15 14 16 repeat;
--webkit-border-image: url(images/outer.png) 14 15 14 16 repeat;
--o-border-image: url(outer.png) 14 15 14 16 repeat;
-border-image: url(images/outer.png) 14 15 14 16 repeat; background-image: url(images/mud.png);
- position: absolute; height: 80vh; width: 80vw; margin: 5vw; margin-top: 5vh;
+	border-width: 16px;
+	-moz-border-image: url(outer.png) 14 15 14 16 repeat;
+	-webkit-border-image: url(images/outer.png) 14 15 14 16 repeat;
+	-o-border-image: url(outer.png) 14 15 14 16 repeat;
+	border-image: url(images/outer.png) 14 15 14 16 repeat; background-image: url(images/mud.png);
+	position: fixed; top:0; left:0; height: 100vh; width: 100vw; margin: 0; overflow: hidden;
 }
 
 
 .track .inner {
 background-image: url(images/bg.png);
 border-image: url(images/inner.png); border-image-slice: 16 16 16 16 fill; border-image-width: 16px 16px 16px 16px; border-image-outset: 0px 0px 0px 0px; border-image-repeat: round round;
-	border-collapse: separate; margin-top: 15vh; margin-left: 10vw; display: table;  solid transparent; background-color: green; width: 60vw; height: 50vh;}
+	border-collapse: separate; margin-top: 18vh; margin-left: 12vw; display: table; position: relative; border: solid transparent; background-color: green; width: 70vw; height: 55vh;}
 
-.horse {background-image: url(images/horse2.png);}
+.horse {background-image: url(images/horse2.png); position: relative;}
+
+/* Horse Name Label */
+.horseName {
+	position: absolute;
+	top: -25px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 165, 0, 0.95));
+	color: #000;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 13px;
+	font-weight: bold;
+	white-space: nowrap;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	z-index: 1000;
+	text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+	font-family: 'Be Vietnam Pro', sans-serif;
+}
+
 .horse.runLeft {
 	width: 96px;
 	height: 60px;
@@ -229,8 +259,8 @@ border-image: url(images/inner.png); border-image-slice: 16 16 16 16 fill; borde
 
 
 #startline {
-	width: 2vw;
-	height: 15vh;
+	width: 4vw;
+	height: 40vh;
 background-color: #eee;
 
 background-image: linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black), 
@@ -238,13 +268,13 @@ linear-gradient(-45deg, black 25%, transparent 25%, transparent 75%, black 75%, 
 
 background-size:1vw 1vw;
 position: absolute;
-margin-left: 20vw;
+margin-left: 30vw;
 margin-top: 65vh;
 opacity: 0.7;
 }
 
 #horse1 {
-	position: absolute; top: 68vh; z-index: 999;
+	position: absolute; top: 76vh; left: 30vw; z-index: 999;
 }
 
 #horse4 .rider .head {background-image: url(images/head2.png);}
@@ -258,22 +288,22 @@ opacity: 0.7;
 #horse2 .rider .body {background-image: url(images/body4.png);}
 
 #horse2 {
-	position: absolute; top: 72vh;  z-index: 999;
+	position: absolute; top: 82vh; left: 30vw; z-index: 999;
 	background-image: url(images/horse3.png);
 }
 
 #horse3 {
-	position: absolute; top: 76vh;  z-index: 999;
+	position: absolute; top: 88vh; left: 30vw; z-index: 999;
 	background-image: url(images/horse1.png);
 }
 
 #horse4 {
-	position: absolute; top: 80vh; z-index: 999;
+	position: absolute; top: 94vh; left: 30vw; z-index: 999;
 	background-image: url(images/horse4.png);
 }
 
 
-.horse {left: 30vw;}
+/* Individual horse positions set in #horse1, #horse2, #horse3, #horse4 */
 
 .horse.standLeft {background-position: 0px -64px; width: 96px; height: 60px;}
 .horse.standLeft .rider .body {background-position: -32px -320px;}
@@ -427,7 +457,7 @@ opacity: 0.7;
 	color: #000;
 }
 
-#bet, #results {
+#controls, #results {
 	background-color: #ffefb4;
 	padding: 1.5vw;
 	width: 20vw;
@@ -437,17 +467,18 @@ opacity: 0.7;
 	margin-left: 2vw;
 	overflow: auto;
 	float: left;
+	color: #222;
 }
 
 
-#funds {font-weight: bold;}
-#funds:before {content: "£";}
-
 label, input, select {float:  left; display: block; width: 8vw; margin-bottom: 0.5vh;}
 label {clear: left;}
+#status, #winner {clear: left; margin-top: 1vh; font-weight: bold;}
 
-#results {width: auto; position: absolute; margin-top: 8vh; margin-left: 48vw;}
-#results td {height: 30px; width: 30px; background-repeat: no-repeat; background-position: 0px -64px;}
+#results {width: auto; position: absolute; top: 6vh; right: 2vw;}
+#results td {height: 30px; background-repeat: no-repeat; background-position: 0px -64px;}
+#results td:first-child {width: 140px; white-space: nowrap;}
+#results td:last-child {width: 30px;}
 #results .horse1 { background-image: url(images/head0.png);}
 #results .horse2 {  background-image: url(images/head4.png);}
 #results .horse3 {  background-image: url(images/head1.png);}
@@ -474,108 +505,38 @@ label {clear: left;}
 
 /*The audio controls*/
 
-#volumeControls{
-	position: absolute;
-	left: 90.5vw;
-	top: 7vh;
-	height: auto;
-	width: 80px;
-	background: linear-gradient(to bottom right, rgba(200,0,0,0.5), rgba(200,0,100,0.5));
-	border: 5px dashed yellow;
-	text-align: center;
-}
-
-#playPause img, #volumeLevel img{
-	width: 50px;
-	height: 50px;
-}
-
-
-.music{
-	cursor: pointer;
-	user-select: none;
-
-}
-
-.music img{
-	border-radius: 50%;
-	filter: brightness(95%);
-	width: 30px;
-	height: 30px;
-
-}
-
-.music img:hover{
-	filter: brightness(110%);
-}
-
-.music img:active{
-	filter:brightness(90%);
-	transform: translateX(1px) translateY(1px);
-}
+/* audio controls removed */
 
 /*Countdown Timer*/
 #countDown{
 	position: absolute;
-	width: 220px;
-	height: 180px;
-	left: 42vw;
-	top: 35vh;
+	width: 280px;
+	height: 280px;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 	z-index: 130;
 	transition: opacity 1s;
 	user-select: none;
-	font-size: calc(10vw + 10px);
+	font-size: 150px;
 	color: yellow;
 	background: rgba(200,0,100,0.9);
 	border: 5px groove yellow;
 	text-align: center;
-	padding-bottom: 20px;
 	display: none;
 	font-family: cursive;
+	line-height: 280px;
+	padding: 0;
 }
 
-
-#adDisplay{
-	height: 120px;
-	width: 200px;
-	position: absolute;
-	top: 33vh;
-	left: 38vw;	
-	border: 10px ridge rgba(0,20,100,0.7);
-	border-radius: 15px;
-}
-
-#adDisplay:after{
-	content: "";
-	position: absolute;
-	top: 130px;
-	left: 90px;
-	height: 30px;
-	width: 0px;
-	border-left: 15px ridge rgba(0,20,100,0.7);
-	z-index: 100;
-}
-
-#adDisplay:before{
-	content: "";
-	position: absolute;
-	top: 160px;
-	left: 72px;
-	height: 0px;
-	width: 50px;
-	border-bottom: 10px ridge rgba(0,20,100,0.7);
-	z-index: 100;
-	border-top-right-radius: 20px;
-	border-top-left-radius: 20px;
-}
 
 /*Modal box for starting the game*/
 #modal{
 	position: fixed;
-	top: 2vh;
-	left: 1vw;
-	width: 98%;
-	height: 96%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background: black;
 	z-index: 2000;
 	box-shadow: 0px 0px 100px 30px black;
@@ -586,58 +547,111 @@ label {clear: left;}
 }
 
 
-#modalLeft{
-	width: 50%;
-	background: white;
-	height: 100%;
-}
-
 #modalRight{
-	width: 50%;
+	width: 100%;
 	text-align: center;
-	background: url('Resources/backgroundRight.gif');
+	background: url('Resources/Gemini_Generated_Image_lxto4rlxto4rlxto.png');
 	background-size: cover;
+	background-position: center bottom;
+	background-repeat: no-repeat;
+	position: relative;
+	display: flex;
+	align-items: center;
 }
 
-#modalRight h1, #modalRight h3{
-	color: white;
+.heroContent{
+	width: 46%;
+	margin-left: auto;
+	margin-right: 4vw;
+	text-align: center;
+	color: #fff;
+	text-shadow: 0 6px 18px rgba(7, 15, 48, 0.65);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1.8vh;
+	min-height: 42vh;
+	transform: translateY(-2vh);
+	padding: 0;
+	border-radius: 0;
+	background: transparent;
+	backdrop-filter: none;
+	border: none;
+	box-shadow: none;
 }
 
+.heroContent h1{
+	margin: 0;
+	font-size: 3vw;
+	letter-spacing: 0.5px;
+	font-family: 'Space Grotesk', 'Be Vietnam Pro', sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	background: linear-gradient(90deg, #f8fafc, #a5f3fc, #f8fafc);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.heroContent h3{
+	margin: 0;
+	font-size: 1.25vw;
+	font-weight: 600;
+	color: var(--hero-sub);
+	letter-spacing: 0.6px;
+}
+
+.heroContent .tagline{
+	margin: 0;
+}
 
 #playButtonHolder{
-	margin:auto;
-	width: 60%;
-	height: 80px;
-	text-align: center;
-	border: 15px ridge white;
-	border-radius: 30px;
-	animation-name: playButtonAnimation;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-}
-
-@keyframes playButtonAnimation{
-	0%, 100%{border: 15px ridge white;}
-	25%{border: 15px ridge orange;}
-	50%{border: 15px ridge cyan;}
-	75%{border: 15px ridge orange;}
+	width: 70%;
+	margin: 0;
+	height: auto;
+	border: none;
+	animation: none;
+	align-self: center;
 }
 
 #playButton{
 	width: 100%;
 	height: 80px;
-	border-radius: 10px;
+	border-radius: 12px;
 	cursor: pointer;
-	background: rgba(0, 130, 200, 0.7);
-	border:none;
-	font-size: 25px;
-	font-weight: bold;
-	color: white;
-	transition: background 0.3s;
+	background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+	border: 2px solid rgba(255,255,255,0.45);
+	box-shadow: 0 0 0 4px rgba(34,211,238,0.18), 0 14px 28px rgba(6, 31, 70, 0.6);
+	color: #f8fafc;
+	font-size: 1.25vw;
+	font-weight: 700;
+	letter-spacing: 0.6px;
+	text-transform: uppercase;
+	position: relative;
+	overflow: hidden;
+	transition: box-shadow 0.25s, background 0.25s, transform 0.2s;
 }
 
 #playButton:hover{
-	background: rgba(150, 200, 0, 0.7);
+	background: linear-gradient(135deg, #38bdf8, #a5f3fc);
+	box-shadow: 0 0 0 6px rgba(110,231,255,0.25), 0 18px 36px rgba(6, 31, 70, 0.65);
+	transform: translateY(-2px);
+}
+
+#playButton:after{
+	content: "";
+	position: absolute;
+	top: -60%;
+	left: -20%;
+	width: 140%;
+	height: 220%;
+	background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.45), transparent 55%);
+	opacity: 0.55;
+	transition: opacity 0.3s;
+}
+
+#playButton:hover:after{
+	opacity: 0.8;
 }
 
 #lapDisplay{
@@ -648,7 +662,330 @@ label {clear: left;}
 	z-index: 100;
 	font-family: Verdana, Geneva, sans-serif;
 	font-weight: bolder;
-	color: yellow;	
+	color: yellow;
 	transition: opacity 0.5s;
 	opacity: 0;
+}
+
+
+/* ==================== EVENT SYSTEM STYLES ==================== */
+
+/* Event Notification - Center Screen */
+#eventNotification {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: linear-gradient(135deg, rgba(138, 43, 226, 0.95), rgba(75, 0, 130, 0.95));
+	color: white;
+	padding: 20px 40px;
+	border-radius: 15px;
+	font-size: 28px;
+	font-weight: bold;
+	z-index: 9999;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease-in-out;
+	box-shadow: 0 0 30px rgba(138, 43, 226, 0.6), 0 0 60px rgba(138, 43, 226, 0.4);
+	text-align: center;
+	min-width: 300px;
+	border: 3px solid rgba(255, 255, 255, 0.3);
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#eventNotification.show {
+	opacity: 1;
+}
+
+/* Visual Effect: Speed Boost - Green Glow + Particles */
+.speedBoost {
+	animation: glowGreen 0.4s ease-in-out infinite alternate;
+	filter: brightness(1.5);
+	z-index: 1001;
+}
+
+@keyframes glowGreen {
+	0% {
+		filter: drop-shadow(0 0 10px #0f0) drop-shadow(0 0 20px #0f0) brightness(1.4);
+		transform: scale(1);
+	}
+	100% {
+		filter: drop-shadow(0 0 25px #0f0) drop-shadow(0 0 40px #0f0) brightness(1.7);
+		transform: scale(1.05);
+	}
+}
+
+/* Speed Boost Particles */
+.speedParticle {
+	width: 30px;
+	height: 4px;
+	background: linear-gradient(90deg, transparent, #0f0, #0f0, transparent);
+	border-radius: 2px;
+	animation: speedTrail 0.5s ease-out forwards;
+	pointer-events: none;
+	z-index: 997;
+	box-shadow: 0 0 10px #0f0;
+}
+
+@keyframes speedTrail {
+	0% {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+		filter: brightness(2);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(-50px) scale(0.5);
+		filter: brightness(0.5);
+	}
+}
+
+/* Visual Effect: Speed Slow - Gray/Dim + Smoke */
+.speedSlow {
+	animation: glowGray 0.8s ease-in-out infinite alternate;
+	filter: grayscale(0.7);
+}
+
+@keyframes glowGray {
+	0% {
+		filter: grayscale(0.7) brightness(0.7) drop-shadow(0 0 8px rgba(50, 50, 50, 0.8));
+		transform: scale(1);
+	}
+	100% {
+		filter: grayscale(0.9) brightness(0.5) drop-shadow(0 0 15px rgba(30, 30, 30, 1));
+		transform: scale(0.98);
+	}
+}
+
+/* Speed Slow Smoke Particles */
+.smokeParticle {
+	width: 20px;
+	height: 20px;
+	background: radial-gradient(circle, rgba(80, 80, 80, 0.8), rgba(50, 50, 50, 0.6), transparent);
+	border-radius: 50%;
+	animation: smokeRise 0.8s ease-out forwards;
+	pointer-events: none;
+	z-index: 997;
+}
+
+@keyframes smokeRise {
+	0% {
+		opacity: 0.8;
+		transform: translateY(0) scale(0.5);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-30px) scale(1.5);
+		filter: blur(8px);
+	}
+}
+
+/* Visual Effect: Warp Forward - Flash */
+.warpEffect {
+	animation: warpFlash 1s ease-out;
+	z-index: 1001;
+}
+
+/* Warp After-Image Effect - Enhanced with stronger colors */
+.warpAfterImage {
+	animation: warpFade 1s ease-out forwards;
+	pointer-events: none;
+	z-index: 998;
+	box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+}
+
+/* Lightning Flash Effect */
+.warpFlash {
+	animation: lightningFlash 0.6s ease-out forwards;
+	background: radial-gradient(circle, rgba(0, 255, 255, 0.9), rgba(138, 43, 226, 0.6), transparent);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes lightningFlash {
+	0% {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(0.5);
+		filter: brightness(5);
+	}
+	50% {
+		opacity: 0.8;
+		transform: translate(-50%, -50%) scale(2);
+		filter: brightness(3);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(3);
+		filter: brightness(1);
+	}
+}
+
+@keyframes warpFade {
+	0% {
+		opacity: 1;
+		filter: brightness(3) hue-rotate(180deg) saturate(2);
+		transform: scale(1);
+	}
+	30% {
+		opacity: 0.8;
+		filter: brightness(2.5) hue-rotate(270deg) saturate(1.8);
+		transform: scale(1.1);
+	}
+	60% {
+		opacity: 0.5;
+		filter: brightness(1.5) hue-rotate(360deg) blur(5px) saturate(1.5);
+		transform: scale(0.9);
+	}
+	100% {
+		opacity: 0;
+		filter: brightness(0.3) blur(15px) saturate(0.5);
+		transform: scale(0.6);
+	}
+}
+
+@keyframes warpFlash {
+	0% {
+		filter: brightness(5) hue-rotate(180deg) blur(3px) saturate(3);
+		transform: scale(1.5);
+		opacity: 0.5;
+		box-shadow: 0 0 50px rgba(0, 255, 255, 1), 0 0 100px rgba(138, 43, 226, 0.8);
+	}
+	20% {
+		filter: brightness(8) hue-rotate(90deg) blur(10px) saturate(4);
+		transform: scale(2);
+		opacity: 0.3;
+		box-shadow: 0 0 80px rgba(0, 255, 255, 1), 0 0 150px rgba(138, 43, 226, 1);
+	}
+	40% {
+		filter: brightness(6) hue-rotate(45deg) blur(6px) saturate(3);
+		transform: scale(1.8);
+		opacity: 0.6;
+		box-shadow: 0 0 60px rgba(255, 255, 0, 0.9), 0 0 120px rgba(255, 0, 255, 0.7);
+	}
+	70% {
+		filter: brightness(3) hue-rotate(0deg) blur(2px) saturate(2);
+		transform: scale(1.2);
+		opacity: 0.9;
+		box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+	}
+	100% {
+		filter: brightness(1) hue-rotate(0deg) blur(0px) saturate(1);
+		transform: scale(1);
+		opacity: 1;
+		box-shadow: none;
+	}
+}
+
+/* Visual Effect: Stumble - Shake + Dizzy */
+.stumbleEffect {
+	animation: stumbleShake 0.3s ease-in-out infinite;
+	filter: blur(2px) brightness(1.2);
+}
+
+@keyframes stumbleShake {
+	0%, 100% {
+		transform: translateX(0) rotate(0deg);
+	}
+	10% {
+		transform: translateX(-8px) rotate(-5deg);
+	}
+	20% {
+		transform: translateX(8px) rotate(5deg);
+	}
+	30% {
+		transform: translateX(-6px) rotate(-4deg);
+	}
+	40% {
+		transform: translateX(6px) rotate(4deg);
+	}
+	50% {
+		transform: translateX(-4px) rotate(-3deg);
+	}
+	60% {
+		transform: translateX(4px) rotate(3deg);
+	}
+	70% {
+		transform: translateX(-2px) rotate(-2deg);
+	}
+	80% {
+		transform: translateX(2px) rotate(2deg);
+	}
+	90% {
+		transform: translateX(-1px) rotate(-1deg);
+	}
+}
+
+/* Dizzy Stars Effect */
+.dizzyStar {
+	animation: dizzyOrbit 1.5s ease-out forwards;
+	pointer-events: none;
+	text-shadow: 0 0 10px yellow, 0 0 20px yellow;
+}
+
+@keyframes dizzyOrbit {
+	0% {
+		opacity: 1;
+		transform: translate(0, 0) scale(0.5) rotate(0deg);
+	}
+	50% {
+		opacity: 1;
+		transform: translate(30px, -30px) scale(1.2) rotate(180deg);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(60px, 0) scale(0.8) rotate(360deg);
+	}
+}
+
+/* ==================== EFFECTS LEGEND ==================== */
+
+#effectsLegend {
+	position: absolute;
+	bottom: 2vh;
+	left: 2vw;
+	background-color: rgba(255, 239, 180, 0.95);
+	padding: 1.2vw;
+	border: 2px solid #555;
+	border-radius: 15px;
+	color: #222;
+	font-family: 'Be Vietnam Pro', sans-serif;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	min-width: 200px;
+}
+
+.legendHeader {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: center;
+	color: #333;
+	border-bottom: 2px solid #daa520;
+	padding-bottom: 6px;
+}
+
+.legendItem {
+	display: flex;
+	align-items: center;
+	margin: 8px 0;
+	padding: 6px;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 8px;
+	transition: background-color 0.2s;
+}
+
+.legendItem:hover {
+	background-color: rgba(255, 255, 255, 0.9);
+}
+
+.legendIcon {
+	font-size: 20px;
+	margin-right: 10px;
+	min-width: 25px;
+	text-align: center;
+}
+
+.legendText {
+	font-size: 13px;
+	font-weight: 500;
+	color: #333;
 }

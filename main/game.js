@@ -8,16 +8,16 @@
 // Some globally declared variables
 
 	var i = 1;
-	var horseBetOn;
-	var inputAmount; 
-	var currentMoney = 100; //The initial money provided
-	var validationSpan;
 	var lapDisplay;
-	var adDisplayInner;
+	var statusMessage;
+	var winnerDisplay;
 	var mainTheme = new Audio("main-theme.mp3"); //The background music
-	var winSound = new Audio("Resources/win.mp3"); //The audio to be played on win condition
-	var loseSound = new Audio("Resources/lose.mp3"); //The audio to be played on lose condition
-	loseSound.playbackRate = 2.0; //The loseSound is a bit slower kind of audio and so needs to be fast forwarded by 2x
+
+	// Event System Variables
+	var allRacers = [];
+	var eventTimer = null;
+	var eventNotification = null;
+	var activeEffects = {}; // Track active effects per horse
 
 
 // This is the audio control widget and the main theme itself 
@@ -28,73 +28,6 @@
 	   	mainTheme.loop = true;
 	   	mainTheme.volume = 0.5;
 	   	mainTheme.play();
-   		
-   		var minus = document.getElementById('minus');
-   		var plus = document.getElementById('plus');
-   		var pause = document.getElementById('playPause');
-   		var level = document.getElementById('volumeLevel');
-
-// The minus button that reduces the volume
-   		minus.addEventListener('click', function(){
-   			if (mainTheme.volume>=0.1) mainTheme.volume -= 0.1;
-
-   			if(mainTheme.volume<=0.3 && mainTheme.volume>0.1) {
-   				level.innerHTML='<img src = "Resources/lowvolume.svg" alt = "Volume Level">';
-   			}
-   			else if(mainTheme.volume>=0.4 && mainTheme.volume<0.7) {
-   				level.innerHTML='<img src = "Resources/midvolume.svg" alt = "Volume Level">';
-   			}
-   			else if(mainTheme.volume<=0.1){
-   				level.innerHTML='<img src = "Resources/mute.svg" alt = "Volume Level">';
-   			}
-   		});
-
-
-// The pause and play buttons that perform their respective actions
-   		playPause.addEventListener('click', function(){
-   			if (mainTheme.volume > 0) {
-   				mainTheme.volume = 0;
-   				mainTheme.pause();
-   				this.innerHTML = '<img src = "Resources/play.svg" alt = " - ">';
-   			}
-
-   			else if (mainTheme.volume==0){
-   				mainTheme.play();
-   				mainTheme.volume = 0.5;
-   				this.innerHTML = '<img src = "Resources/pause.svg" alt = " - ">';
-   			}
-
-   		});
-
-// The plus button that increases the volume
-   		plus.addEventListener('click', function(){
-   			if(mainTheme.volume<=0.9) mainTheme.volume += 0.1;
-
-   			if(mainTheme.volume>=0.7) {
-   				level.innerHTML='<img src = "Resources/highvolume.svg" alt = "Volume Level">';
-   			}
-   			else if(mainTheme.volume>=0.4 && mainTheme.volume<0.7){
-   				level.innerHTML='<img src = "Resources/midvolume.svg" alt = "Volume Level">';
-   			}
-   			else if(mainTheme.volume>0.1 && mainTheme.volume<0.4){
-   				level.innerHTML='<img src = "Resources/lowvolume.svg" alt = "Volume Level">';
-   			}
-   		});
-
-   			
-// The level button that mutes or unmutes the music
-   		level.addEventListener('click', function(){
-
-   			if (mainTheme.volume>0){
-   				mainTheme.volume = 0;
-   				this.innerHTML = '<img src = "Resources/mute.svg" alt = "Volume Level">';
-   			}
-   			else if(mainTheme.volume==0){
-   				mainTheme.volume = 0.5;
-   				this.innerHTML = '<img src = "Resources/midvolume.svg" alt = "Volume Level">';
-   			}
-   		});
-
    }
 // End of audio control functions and the audio properties
 
@@ -108,17 +41,25 @@
 *
 */
 
-	function racer(horseId, left, top, number, laps){
+	function racer(horseId, left, top, number, laps, name){
 
 		this.element = document.getElementById(horseId);//The id for respective racers: horse numbers
 		this.left = left;
 		this.top = top;
 		this.number = number;
+		this.name = name;
 		this.interval = 0;
 		this.positions;
 		this.laps = laps;
 		this.speedInterval = 0;
-		horseBetOn = document.getElementById('bethorse').value;
+
+		// RESET position to start - IMPORTANT!
+		this.element.style.left = this.left + 'vw';
+		this.element.style.top = this.top + 'vh';
+		this.element.className = 'horse standRight';
+
+		// Clear any visual effects from previous race
+		this.element.classList.remove('speedBoost', 'speedSlow', 'warpEffect', 'stumbleEffect');
 
 // Different functions for the racers objects. These define the direction and speed of the horses and other features.
 // The speeds of the horses are set so that they change every second.
@@ -142,7 +83,7 @@
 
 			function movingRight(){
 				racers.left += 0.2;
-				if(racers.left >= 70 + racers.number*2.8){
+				if(racers.left >= 80 + racers.number*2.8){
 					racers.runUp();
 				}
 				racers.element.style.left = racers.left +'vw';
@@ -170,7 +111,7 @@
 			}, 1000);
 				function movingUp(){
 					racers.top -= 0.2;
-					if(racers.top <= 3 + racers.number*2.8){
+					if(racers.top <= 1 + racers.number*2.8){
 						racers.runLeft();
 					}
 					racers.element.style.top = racers.top + 'vh';
@@ -199,7 +140,7 @@
 				
 			function movingLeft(){
 				racers.left -= 0.2;
-				if(racers.left <= 0 + racers.number*2.8){
+				if(racers.left <= -3 + racers.number*2.8){
 					racers.runDown();
 				}
 				racers.element.style.left = racers.left +'vw';
@@ -231,7 +172,7 @@
 
 			function movingDown(){
 				racers.top += 0.2;
-				if(racers.top >= 65.5 + racers.number*2.8){
+				if(racers.top >= 74 + racers.number*2.8){
 					if(racers.laps > 1){
 						racers.runRight();
 					}
@@ -239,7 +180,7 @@
 						racers.finishLine();
 					}
 					racers.laps--;
-					setTimeout(function(){lapDisplay.innerHTML = "Laps: " + racers.laps;}, 1500);
+					setTimeout(function(){lapDisplay.innerHTML = "Vòng còn lại: " + racers.laps;}, 1500);
 				}
 				racers.element.style.top = racers.top + 'vh';
 			}
@@ -260,16 +201,31 @@
 			racers.interval = setInterval(finishingRace, racers.speed);
 			racers.positions = document.getElementsByTagName('td');
 
+			// Calculate original starting vertical position
+			var targetTop = 70 + racers.number * 6;  // 76, 82, 88, 94vh
 
 			function finishingRace(){
 				racers.left += 0.2;
-				if(racers.left >= 27){
+
+				// Move horse back to original vertical position
+				if (racers.top > targetTop) {
+					racers.top -= 0.3;
+					if (racers.top < targetTop) racers.top = targetTop;
+				} else if (racers.top < targetTop) {
+					racers.top += 0.3;
+					if (racers.top > targetTop) racers.top = targetTop;
+				}
+				racers.element.style.top = racers.top + 'vh';
+
+				if(racers.left >= 30){  // Dừng đúng tại vị trí xuất phát (30vw)
 					racers.element.className = 'horse standRight';
 					clearInterval(racers.interval);
 					racers.positions[i].className = 'horse' + racers.number;
-					if (i == 1)racers.betDecision();
+					if (i == 1 && winnerDisplay){
+						winnerDisplay.innerHTML = "🏆 Người chiến thắng: " + racers.name;
+					}
 					i+=2;
-					
+
 				}
 				racers.element.style.left = racers.left +'vw';
 					
@@ -277,9 +233,15 @@
 					lapDisplay.style.opacity=0;
 					startButton = document.getElementById('start');
 					startButton.className = "";
-					
-					document.getElementById('amount').readOnly = false;
+
 					document.getElementById('lapNumber').readOnly = false;
+					if(statusMessage){
+						statusMessage.style.color = "green";
+						statusMessage.innerHTML = "Kết thúc cuộc đua!";
+					}
+
+					// Stop the event system when race finishes
+					stopEventSystem();
 				}
 
 			}
@@ -292,41 +254,439 @@
 			this.runRight();
 		}
 
-
-// The betdecision function which is called after a racer crosses the finish line and shall be declared as the winner.
-// This executes the betting logic.
-
-		this.betDecision = function(){
-			var racers = this;
-
-			inputAmount = parseInt(document.getElementById('amount').value);
-			adDisplayInner = document.getElementById('adDisplayInner');
-
-			if (racers.positions[1].className == horseBetOn){
-				currentMoney += inputAmount;
-				winSound.play();
-				adDisplayInner.innerHTML='<img src = "Resources/winner.gif" style="height: 100%; width: 100%;">';
-			}
-
-			else {
-				currentMoney -= inputAmount;
-				loseSound.play();
-				adDisplayInner.innerHTML='<img src = "Resources/loser.gif" style="height: 100%; width: 100%;">';
-			}
-		
-			document.getElementById('funds').innerHTML = currentMoney;
-
-			validationSpan = document.getElementById('validationCheck');
-			validationSpan.innerHTML = "";
-
-			setTimeout(function(){
-				adDisplayInner.innerHTML='<img src = "Resources/ad.gif" style="height: 100%; width: 100%;">';
-			}, 6000);
-
-		}
-
 	}
 
+
+//========================================= EVENT SYSTEM =========================================//
+
+// Show notification in center of screen
+function showNotification(message) {
+	if (!eventNotification) {
+		eventNotification = document.getElementById('eventNotification');
+	}
+
+	eventNotification.innerHTML = message;
+	eventNotification.classList.add('show');
+
+	setTimeout(function() {
+		eventNotification.classList.remove('show');
+	}, 2000);
+}
+
+// Apply Speed Boost Event
+function applySpeedBoost(racer) {
+	if (!racer || racer.laps <= 0) return; // Don't apply if race finished
+
+	// Mark this racer as having active effect
+	activeEffects[racer.number] = 'speedBoost';
+
+	// Clear existing speed randomizer
+	clearInterval(racer.speedInterval);
+	clearInterval(racer.interval);
+
+	// Set new fast speed
+	racer.speed = 4;
+
+	// Add visual effect
+	racer.element.classList.add('speedBoost');
+
+	// Create speed lines/particles effect
+	var particleInterval = setInterval(function() {
+		if (racer.element && activeEffects[racer.number] === 'speedBoost') {
+			var particle = document.createElement('div');
+			particle.className = 'speedParticle';
+			particle.style.position = 'absolute';
+			particle.style.left = racer.left + 'vw';
+			particle.style.top = racer.top + 'vh';
+			document.body.appendChild(particle);
+
+			setTimeout(function() {
+				if (particle.parentNode) {
+					particle.parentNode.removeChild(particle);
+				}
+			}, 500);
+		}
+	}, 100);
+
+	// Keep reapplying effect class every 100ms to survive direction changes
+	var effectInterval = setInterval(function() {
+		if (racer.element && activeEffects[racer.number] === 'speedBoost') {
+			racer.element.classList.add('speedBoost');
+		}
+	}, 100);
+
+	// Restart movement with new speed
+	var currentDirection = racer.element.className;
+	if (currentDirection.includes('runRight')) {
+		racer.interval = setInterval(function() {
+			racer.left += 0.2;
+			if (racer.left >= 80 + racer.number * 2.8) {
+				racer.runUp();
+			}
+			racer.element.style.left = racer.left + 'vw';
+		}, racer.speed);
+	} else if (currentDirection.includes('runLeft')) {
+		racer.interval = setInterval(function() {
+			racer.left -= 0.2;
+			if (racer.left <= 0 + racer.number * 2.8) {
+				racer.runDown();
+			}
+			racer.element.style.left = racer.left + 'vw';
+		}, racer.speed);
+	} else if (currentDirection.includes('runUp')) {
+		racer.interval = setInterval(function() {
+			racer.top -= 0.2;
+			if (racer.top <= 3 + racer.number * 2.8) {
+				racer.runLeft();
+			}
+			racer.element.style.top = racer.top + 'vh';
+		}, racer.speed);
+	} else if (currentDirection.includes('runDown')) {
+		racer.interval = setInterval(function() {
+			racer.top += 0.2;
+			if (racer.top >= 74 + racer.number * 2.8) {
+				if (racer.laps > 1) {
+					racer.runRight();
+				} else {
+					racer.finishLine();
+				}
+				racer.laps--;
+			}
+			racer.element.style.top = racer.top + 'vh';
+		}, racer.speed);
+	}
+
+	showNotification("💰 " + racer.name + " được thưởng!");
+
+	// Remove effect after 3 seconds and restore normal speed randomizer
+	setTimeout(function() {
+		clearInterval(effectInterval);
+		clearInterval(particleInterval);
+		delete activeEffects[racer.number];
+		racer.element.classList.remove('speedBoost');
+		// Restore normal speed randomizer
+		if (currentDirection.includes('runRight')) {
+			racer.runRight();
+		} else if (currentDirection.includes('runLeft')) {
+			racer.runLeft();
+		} else if (currentDirection.includes('runUp')) {
+			racer.runUp();
+		} else if (currentDirection.includes('runDown')) {
+			racer.runDown();
+		}
+	}, 3000);
+}
+
+// Apply Speed Slow Event
+function applySpeedSlow(racer) {
+	if (!racer || racer.laps <= 0) return;
+
+	// Mark this racer as having active effect
+	activeEffects[racer.number] = 'speedSlow';
+
+	// Clear existing speed randomizer
+	clearInterval(racer.speedInterval);
+	clearInterval(racer.interval);
+
+	// Set new slow speed
+	racer.speed = 26;
+
+	// Add visual effect
+	racer.element.classList.add('speedSlow');
+
+	// Create smoke/weight particles effect
+	var smokeInterval = setInterval(function() {
+		if (racer.element && activeEffects[racer.number] === 'speedSlow') {
+			var smoke = document.createElement('div');
+			smoke.className = 'smokeParticle';
+			smoke.style.position = 'absolute';
+			smoke.style.left = racer.left + 'vw';
+			smoke.style.top = racer.top + 'vh';
+			document.body.appendChild(smoke);
+
+			setTimeout(function() {
+				if (smoke.parentNode) {
+					smoke.parentNode.removeChild(smoke);
+				}
+			}, 800);
+		}
+	}, 150);
+
+	// Keep reapplying effect class every 100ms to survive direction changes
+	var effectInterval = setInterval(function() {
+		if (racer.element && activeEffects[racer.number] === 'speedSlow') {
+			racer.element.classList.add('speedSlow');
+		}
+	}, 100);
+
+	// Restart movement with new speed
+	var currentDirection = racer.element.className;
+	if (currentDirection.includes('runRight')) {
+		racer.interval = setInterval(function() {
+			racer.left += 0.2;
+			if (racer.left >= 80 + racer.number * 2.8) {
+				racer.runUp();
+			}
+			racer.element.style.left = racer.left + 'vw';
+		}, racer.speed);
+	} else if (currentDirection.includes('runLeft')) {
+		racer.interval = setInterval(function() {
+			racer.left -= 0.2;
+			if (racer.left <= 0 + racer.number * 2.8) {
+				racer.runDown();
+			}
+			racer.element.style.left = racer.left + 'vw';
+		}, racer.speed);
+	} else if (currentDirection.includes('runUp')) {
+		racer.interval = setInterval(function() {
+			racer.top -= 0.2;
+			if (racer.top <= 3 + racer.number * 2.8) {
+				racer.runLeft();
+			}
+			racer.element.style.top = racer.top + 'vh';
+		}, racer.speed);
+	} else if (currentDirection.includes('runDown')) {
+		racer.interval = setInterval(function() {
+			racer.top += 0.2;
+			if (racer.top >= 74 + racer.number * 2.8) {
+				if (racer.laps > 1) {
+					racer.runRight();
+				} else {
+					racer.finishLine();
+				}
+				racer.laps--;
+			}
+			racer.element.style.top = racer.top + 'vh';
+		}, racer.speed);
+	}
+
+	showNotification("📉 " + racer.name + " bị giảm lương!");
+
+	// Remove effect after 3 seconds and restore normal speed randomizer
+	setTimeout(function() {
+		clearInterval(effectInterval);
+		clearInterval(smokeInterval);
+		delete activeEffects[racer.number];
+		racer.element.classList.remove('speedSlow');
+		// Restore normal speed randomizer
+		if (currentDirection.includes('runRight')) {
+			racer.runRight();
+		} else if (currentDirection.includes('runLeft')) {
+			racer.runLeft();
+		} else if (currentDirection.includes('runUp')) {
+			racer.runUp();
+		} else if (currentDirection.includes('runDown')) {
+			racer.runDown();
+		}
+	}, 3000);
+}
+
+// Apply Warp Forward Event
+function applyWarpForward(racer) {
+	if (!racer || racer.laps <= 0) return;
+
+	showNotification("📈 " + racer.name + " bị gọi về đón con!");
+
+	// Store original position for after-images
+	var originalLeft = racer.left;
+	var originalTop = racer.top;
+
+	// INCREASED warp distance to 10 for much more visible effect
+	var warpAmount = 10;
+	var className = racer.element.className;
+
+	// Create multiple after-images for trail effect (5 images)
+	for (var i = 0; i < 5; i++) {
+		(function(index) {
+			setTimeout(function() {
+				var afterImage = document.createElement('div');
+				afterImage.className = 'warpAfterImage';
+				afterImage.style.position = 'absolute';
+				afterImage.style.left = originalLeft + 'vw';
+				afterImage.style.top = originalTop + 'vh';
+				afterImage.style.width = racer.element.offsetWidth + 'px';
+				afterImage.style.height = racer.element.offsetHeight + 'px';
+				afterImage.style.backgroundImage = racer.element.style.backgroundImage || window.getComputedStyle(racer.element).backgroundImage;
+				afterImage.style.backgroundPosition = window.getComputedStyle(racer.element).backgroundPosition;
+				afterImage.style.backgroundSize = window.getComputedStyle(racer.element).backgroundSize;
+				afterImage.style.animationDelay = (index * 0.05) + 's';
+				document.body.appendChild(afterImage);
+
+				// Remove after-image after animation
+				setTimeout(function() {
+					if (afterImage.parentNode) {
+						afterImage.parentNode.removeChild(afterImage);
+					}
+				}, 1000);
+			}, index * 30); // Stagger creation by 30ms
+		})(i);
+	}
+
+	// Add strong visual effect
+	racer.element.classList.add('warpEffect');
+
+	// Create lightning flash effect
+	var flash = document.createElement('div');
+	flash.className = 'warpFlash';
+	flash.style.position = 'absolute';
+	flash.style.left = originalLeft + 'vw';
+	flash.style.top = originalTop + 'vh';
+	flash.style.width = '100px';
+	flash.style.height = '100px';
+	flash.style.pointerEvents = 'none';
+	flash.style.zIndex = '9998';
+	document.body.appendChild(flash);
+	setTimeout(function() {
+		if (flash.parentNode) {
+			flash.parentNode.removeChild(flash);
+		}
+	}, 600);
+
+	if (className.includes('runRight')) {
+		racer.left += warpAmount;
+		racer.element.style.left = racer.left + 'vw';
+		// Check if need to turn
+		if (racer.left >= 80 + racer.number * 2.8) {
+			racer.runUp();
+		}
+	} else if (className.includes('runLeft')) {
+		racer.left -= warpAmount;
+		racer.element.style.left = racer.left + 'vw';
+		// Check if need to turn
+		if (racer.left <= 0 + racer.number * 2.8) {
+			racer.runDown();
+		}
+	} else if (className.includes('runUp')) {
+		racer.top -= warpAmount;
+		racer.element.style.top = racer.top + 'vh';
+		// Check if need to turn
+		if (racer.top <= 3 + racer.number * 2.8) {
+			racer.runLeft();
+		}
+	} else if (className.includes('runDown')) {
+		racer.top += warpAmount;
+		racer.element.style.top = racer.top + 'vh';
+		// Check if crossed finish line or need to turn
+		if (racer.top >= 74 + racer.number * 2.8) {
+			if (racer.laps > 1) {
+				racer.laps--;
+				racer.runRight();
+			} else {
+				racer.finishLine();
+			}
+		}
+	}
+
+	// Remove effect after animation (longer duration)
+	setTimeout(function() {
+		racer.element.classList.remove('warpEffect');
+	}, 1000);
+}
+
+// Apply Stumble Event - Stop in place
+function applyStumble(racer) {
+	if (!racer || racer.laps <= 0) return;
+
+	// Stop the horse completely
+	clearInterval(racer.interval);
+	clearInterval(racer.speedInterval);
+
+	// Add visual effect
+	racer.element.classList.add('stumbleEffect');
+
+	// Create dizzy stars effect
+	for (var i = 0; i < 8; i++) {
+		(function(index) {
+			var star = document.createElement('div');
+			star.className = 'dizzyStar';
+			star.innerHTML = '⭐';
+			star.style.position = 'absolute';
+			star.style.left = racer.left + 'vw';
+			star.style.top = racer.top + 'vh';
+			star.style.fontSize = '20px';
+			star.style.animationDelay = (index * 0.15) + 's';
+			star.style.zIndex = '1000';
+			document.body.appendChild(star);
+
+			setTimeout(function() {
+				if (star.parentNode) {
+					star.parentNode.removeChild(star);
+				}
+			}, 1500);
+		})(i);
+	}
+
+	showNotification("⬇️ " + racer.name + " đứng lại tám chuyện!");
+
+	// Store current direction
+	var className = racer.element.className;
+
+	// Resume movement after 1.5 seconds
+	setTimeout(function() {
+		racer.element.classList.remove('stumbleEffect');
+
+		// Resume racing based on previous direction
+		if (className.includes('runRight')) {
+			racer.runRight();
+		} else if (className.includes('runLeft')) {
+			racer.runLeft();
+		} else if (className.includes('runUp')) {
+			racer.runUp();
+		} else if (className.includes('runDown')) {
+			racer.runDown();
+		}
+	}, 1500);
+}
+
+// Trigger Random Event
+function triggerRandomEvent() {
+	if (allRacers.length === 0) return;
+
+	// Select random racer
+	var randomIndex = Math.floor(Math.random() * allRacers.length);
+	var targetRacer = allRacers[randomIndex];
+
+	// Check if racer is still racing
+	if (!targetRacer || targetRacer.laps <= 0) return;
+
+	// Select random event type with weighted probability
+	var eventRoll = Math.random();
+
+	if (eventRoll < 0.3) {
+		// 30% Speed Boost
+		applySpeedBoost(targetRacer);
+	} else if (eventRoll < 0.6) {
+		// 30% Speed Slow
+		applySpeedSlow(targetRacer);
+	} else if (eventRoll < 0.8) {
+		// 20% Warp Forward
+		applyWarpForward(targetRacer);
+	} else {
+		// 20% Stumble
+		applyStumble(targetRacer);
+	}
+}
+
+// Start Event System
+function startEventSystem() {
+	// Clear any existing timer
+	if (eventTimer) {
+		clearInterval(eventTimer);
+	}
+
+	// Start triggering events every 6 seconds
+	eventTimer = setInterval(triggerRandomEvent, 6000);
+}
+
+// Stop Event System
+function stopEventSystem() {
+	if (eventTimer) {
+		clearInterval(eventTimer);
+		eventTimer = null;
+	}
+}
+
+//========================================= END EVENT SYSTEM =========================================//
 
 
 //----------------------------------------INSERT ALL THE CODES HERE FOR WHAT HAPPENS WHEN THE WINDOW LOADS-------------------------------------//
@@ -353,33 +713,44 @@ window.onload = function() {
 
 // The startRace function starts the race or halts it if some validation erros exist
 	function startRace(){
+		// Stop any existing event system from previous race
+		stopEventSystem();
+
+		// Clear any active effects
+		activeEffects = {};
+
+		// Clear all existing intervals from previous race
+		if (allRacers && allRacers.length > 0) {
+			for (var k = 0; k < allRacers.length; k++) {
+				if (allRacers[k]) {
+					clearInterval(allRacers[k].interval);
+					clearInterval(allRacers[k].speedInterval);
+				}
+			}
+		}
+
 		var laps = parseInt(document.getElementById('lapNumber').value);
 
-		var racer1 = new racer('horse1', 30, 68, 1, laps);
-		var racer2 = new racer('horse2', 30, 72, 2, laps);
-		var racer3 = new racer('horse3', 30, 76, 3, laps);
-		var racer4 = new racer('horse4', 30, 80, 4, laps);
+		var racer1 = new racer('horse1', 30, 76, 1, laps, 'Anh Huy');
+		var racer2 = new racer('horse2', 30, 82, 2, laps, 'Anh Trường');
+		var racer3 = new racer('horse3', 30, 88, 3, laps, 'Anh Nhân');
+		var racer4 = new racer('horse4', 30, 94, 4, laps, 'Chị Thu Trang');
 
+		// Save racers for event system
+		allRacers = [racer1, racer2, racer3, racer4];
 
-		inputAmount = document.getElementById('amount');
-		var convertToNum = parseInt(inputAmount.value);
-		var validationSpan = document.getElementById('validationCheck');
-		funds = parseInt(document.getElementById('funds').innerHTML);
 		var countDown = document.getElementById('countDown');
+		statusMessage = document.getElementById('status');
+		winnerDisplay = document.getElementById('winner');
+		if(winnerDisplay) winnerDisplay.innerHTML = "🏆 Người chiến thắng: ?";
 
 
 // The validation tests
-		if (convertToNum < 1 || isNaN(convertToNum)){
-			validationSpan.style.color = "red";
-			validationSpan.innerHTML = '<br>* Please enter a valid amount.<br>';		
-		}
-		else if (convertToNum > funds){
-			validationSpan.style.color = "red";
-			validationSpan.innerHTML = '<br>* You do not have enough funds.<br>';	
-		}
-		else if (laps<1 || isNaN(laps)){
-			validationSpan.style.color = "red";
-			validationSpan.innerHTML = "<br>Invalid number of Laps.<br>";
+		if (laps<1 || isNaN(laps)){
+			if(statusMessage){
+				statusMessage.style.color = "red";
+				statusMessage.innerHTML = "* Số vòng không hợp lệ!";
+			}
 		}
 
 
@@ -388,27 +759,29 @@ window.onload = function() {
 			this.className = "start";
 
 // Disable the inputs when the race begins
-			document.getElementById('amount').readOnly = true;
 			document.getElementById('lapNumber').readOnly = true;
 			lapDisplay = document.getElementById('lapDisplay');
 			lapDisplay.style.opacity=1;
-			lapDisplay.innerHTML = "Laps: " + laps;
+			lapDisplay.innerHTML = "Vòng còn lại: " + laps;
 
-			validationSpan.style.color = "green";
-			validationSpan.innerHTML = "<br>You betted £" + convertToNum + "!<br>";
+			if(statusMessage){
+				statusMessage.style.color = "green";
+				statusMessage.innerHTML = "Chuẩn bị xuất phát...";
+			}
 			var x = 3;
 			interval = setInterval(countDownTimer, 1000);
 
-			setTimeout(function(){countDown.style.display = "none";}, 5500);
-
-// This timeout prevents the horses from running before the countdown timer does its job
-			setTimeout(begin, 4500);
-
 			function begin(){
+				console.log("BEGIN FUNCTION CALLED!");
+				console.log("Racer1:", racer1);
+				console.log("Racer2:", racer2);
+				console.log("Racer3:", racer3);
+				console.log("Racer4:", racer4);
 				racer1.startRace();
 				racer2.startRace();
 				racer3.startRace();
 				racer4.startRace();
+				console.log("All racers started!");
 			}
 
 			i = 1;
@@ -426,7 +799,7 @@ window.onload = function() {
 				countDown.innerHTML=x;
 				if (x<1) {
 					clearInterval(interval);
-					goFunction();		
+					goFunction();	
 				}
 				x--;
 			}
@@ -436,7 +809,10 @@ window.onload = function() {
 				countDown.innerHTML="Go!";
 				setTimeout(function(){
 					countDown.style.opacity = 0;
-				}, 500);
+					begin();
+					// Start the event system when race begins
+					startEventSystem();
+				}, 1500);  // Changed from 500ms to 1500ms (1.5 seconds delay)
 			}
 
 	}

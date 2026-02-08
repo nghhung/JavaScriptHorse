@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Horse Racing</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Lucky Racing</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="game.css" />
 		<script src="game.js"></script>
 	</head>
@@ -9,14 +14,6 @@
 	<body>
 
 
-	<!-- Self added bit Audio Controls and -->
-
-		<div id = "volumeControls">
-			<p id = "plus" class = "music"><img src = "Resources/add.svg" alt = " + "></p>
-			<p id = "playPause" class = "play music"><img src = "Resources/pause.svg" alt = "Pause"></p>
-			<p id = "volumeLevel" class = "music"><img src = "Resources/midvolume.svg" alt = "Volume Level"></p>
-			<p id = "minus" class = "music"><img src = "Resources/minus.svg" alt = " - "> </p>
-		</div>
 	<!-- Self added bit Countdown Timer -->
 		<div id = "countDown">
 
@@ -25,16 +22,13 @@
 	<!-- Self added bit modal window -->
 		<div id = "modal">
 			<span id = "close"></span>
-			<div id = "modalLeft"><img src = "Resources/modalLeft.png" style = "height: 100%;"></div>
 			<div id = "modalRight">
-				<br>
-				<h1>JavaScript Horse Racing<br> Betting Game</h1>
-				<br>
-				<h3>- By Diwas Lamsal</h3>
-				<br><br><br>
-				<div id = "playButtonHolder"><button id = "playButton">Start Game</button></div>
-				<br><br><br><br>
-				<h3>Click the Start Game button to start playing!!</h3>
+				<div class="heroContent">
+					<h1>Lucky Racing</h1>
+					<h3>- By Diwas Lamsal</h3>
+					<div id = "playButtonHolder"><button id = "playButton">Start Game</button></div>
+					<h3 class="tagline">Click Start to run a race and see who wins!</h3>
+				</div>
 
 			</div>
 			
@@ -93,38 +87,16 @@
 					Start Race
 				</div>
 
-				<div id="bet">
-					<p>You currently have <span id="funds">100</span></p>
-					<label>Bet Amount  (£)</label>
-					<input id="amount"/>
-					<!-- Added bit of code -->
-					<br>					
-					<span id = "validationCheck" style="font-size: 15px;"></span>
-					<br>
-					<!-- Added bit of code -->
-
-					<label>Bet on horse:</label>
-					<select id="bethorse">
-						<option value="horse1">White</option>
-						<option value="horse2">Blue</option>
-						<option value="horse3">Green</option>
-						<option value="horse4">Brown</option>
-					</select>
-
-					<!-- Added bit of code -->
-					<br><br>
+				<div id="controls">
 					<label>Laps:</label>
-					<input type="number" id="lapNumber" value=1>
-					<!-- Added bit of code -->
-
+					<input type="number" id="lapNumber" value="1">
+					<div id="status"></div>
+					<div id="winner"></div>
 				</div>
-				
-				<img src="images/tree.png" class="tree" />
-				<img src="images/tree.png" class="tree" />
-				<img src="images/tree.png" class="tree" />
-				
-				<div id = "adDisplay"><div style="background: black; width: 100%; height: 100%; overflow: hidden;" id = "adDisplayInner"><img src = "Resources/ad.gif" style="height: 100%; width: 100%;"></div></div>
+			
 
+				
+				
 			<table id="results">
 				<thead>
 				<tr>
