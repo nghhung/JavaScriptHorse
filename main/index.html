@@ -24,10 +24,10 @@
 			<span id = "close"></span>
 			<div id = "modalRight">
 				<div class="heroContent">
-					<h1>Lucky Racing</h1>
-					<h3>- By Diwas Lamsal</h3>
-					<div id = "playButtonHolder"><button id = "playButton">Start Game</button></div>
-					<h3 class="tagline">Click Start to run a race and see who wins!</h3>
+					<h1>Đua Ngựa Khai Xuân</h1>
+					<h3>- ENOUVO</h3>
+					<div id = "playButtonHolder"><button id = "playButton">Đua Ngựa Nào</button></div>
+					<h3 class="tagline">Cùng đặt cược nào, mại zô mại zô!</h3>
 				</div>
 
 			</div>
@@ -35,6 +35,7 @@
 		</div>
 
 		<div id="horse1" class="horse standRight">
+			<div class="horseName">Anh Huy</div>
 			<div class="rider">
 				<div class="head">
 				</div>
@@ -46,6 +47,7 @@
 
 
 		<div id="horse2" class="horse standRight">
+			<div class="horseName">Anh Trường</div>
 			<div class="rider">
 				<div class="head">
 				</div>
@@ -57,6 +59,7 @@
 
 
 		<div id="horse3" class="horse standRight">
+			<div class="horseName">Anh Nhân</div>
 			<div class="rider">
 				<div class="head">
 				</div>
@@ -68,6 +71,7 @@
 
 
 		<div id="horse4" class="horse standRight">
+			<div class="horseName">Chị Thu Trang</div>
 			<div class="rider">
 				<div class="head">
 				</div>
@@ -84,50 +88,72 @@
 			</div>
 			<div class="inner">
 				<div id="start">
-					Start Race
+					🏁 Bắt Đầu
 				</div>
 
 				<div id="controls">
-					<label>Laps:</label>
+					<label>Số vòng:</label>
 					<input type="number" id="lapNumber" value="1">
 					<div id="status"></div>
 					<div id="winner"></div>
 				</div>
-			
-
 				
 				
 			<table id="results">
 				<thead>
 				<tr>
-					<th>Results</th>
+					<th>Kết Quả</th>
 					<th></th>
 				</tr>
 				</thead>
 				<tr>
-					<td>1st</td>
+					<td>Anh Huy</td>
 					<td class="horse1"></td>
 				</tr>
 				<tr>
-					<td>2nd</td>
+					<td>Anh Trường</td>
 					<td class="horse2"></td>
 				</tr>
 				<tr>
-					<td>3rd</td>
+					<td>Anh Nhân</td>
 					<td class="horse3"></td>
 				</tr>
 				<tr>
-					<td>4th</td>
+					<td>Chị Thu Trang</td>
 					<td class="horse4"></td>
 				</tr>
 			</table>
+
+			<!-- Effects Legend -->
+			<div id="effectsLegend">
+				<div class="legendHeader">Các Hiệu Ứng</div>
+				<div class="legendItem">
+					<span class="legendIcon">💰</span>
+					<span class="legendText">Được thưởng (Tăng tốc)</span>
+				</div>
+				<div class="legendItem">
+					<span class="legendIcon">📉</span>
+					<span class="legendText">Giảm lương (Chậm lại)</span>
+				</div>
+				<div class="legendItem">
+					<span class="legendIcon">📈</span>
+					<span class="legendText">Đón con (Nhảy vọt)</span>
+				</div>
+				<div class="legendItem">
+					<span class="legendIcon">⬇️</span>
+					<span class="legendText">Tám chuyện (Dừng lại)</span>
+				</div>
+			</div>
 </div>
 
 		</div>
 		<div id = "lapDisplay"></div>
 
+		<!-- Event Notification -->
+		<div id="eventNotification"></div>
 
 
-	
+
+
 	</body>
 </html>
